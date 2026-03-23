@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(output/**)",
+      "Write(*.md)",
+      "Write(*.py)",
+      "Write(*.ipynb)",
+      "WebSearch(*)",
+      "WebFetch(*)"
+    ]
+  }
+}

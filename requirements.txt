@@ -1,0 +1,16 @@
+pandas
+numpy
+statsmodels
+scikit-learn
+plotly
+matplotlib
+seaborn
+fredapi
+wbgapi
+yfinance
+jupytext
+jupyter
+streamlit
+requests
+scipy
+linearmodels
