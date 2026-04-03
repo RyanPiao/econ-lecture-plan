@@ -49,6 +49,8 @@ Override with `--type` when needed (e.g., principles course needs a lab day).
 │   ├── index.html, viewer.js, viewer.css, serve.sh
 ├── slide-manager.sh            Edit slides without raw HTML
 ├── slide-manager.py            BeautifulSoup backend
+├── sync-slides.sh              Drop PNGs in extra-slides/, run this
+├── extra-slides/               Drop folder for quick PNG slide adds
 ├── pipeline-state.json         v2 (pending/in_progress/completed)
 ├── .pipeline-lock              Concurrency protection
 ├── nlm-state.json              Stage 6 (includes chain PID)

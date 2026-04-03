@@ -205,11 +205,13 @@ For each successful figure:
 
 1. Create `{base}/{slug}/viewer/` directory
 2. Copy viewer template files from `skills/lecture-viewer/templates/`
-3. Copy slide-manager scripts to lecture directory root:
+3. Copy editing tools to lecture directory root:
    ```bash
    cp skills/lecture-viewer/scripts/slide-manager.sh "{base}/{slug}/slide-manager.sh"
    cp skills/lecture-viewer/scripts/slide-manager.py "{base}/{slug}/slide-manager.py"
-   chmod +x "{base}/{slug}/slide-manager.sh"
+   cp skills/lecture-viewer/scripts/sync-slides.sh "{base}/{slug}/sync-slides.sh"
+   chmod +x "{base}/{slug}/slide-manager.sh" "{base}/{slug}/sync-slides.sh"
+   mkdir -p "{base}/{slug}/extra-slides"
    ```
 4. Inject lecture-specific config into `viewer.js`:
    - `presentationPath`: relative path to `../presentation.html`
