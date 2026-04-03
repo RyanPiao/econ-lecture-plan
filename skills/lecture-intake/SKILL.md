@@ -6,7 +6,7 @@ description: Collect structured inputs for lecture preparation — course title,
 # Lecture Intake
 
 Routes:
-- `/new-lecture` → Read `intake.md`, collect all required fields, write structured intake form to `output/{slug}/intake.md`
+- `/new-lecture` → Read `intake.md`, collect all required fields, write structured intake form to `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/intake.md`
 
 ## Required inputs
 Collect all of the following (prompt for anything missing):
@@ -21,6 +21,6 @@ Collect all of the following (prompt for anything missing):
 8. **Supporting Materials** — uploaded documents, textbook chapters, slides (optional)
 
 ## Output
-`output/{course-slug}-topic-{N}-{slug}/intake.md` using `templates/intake-form.md`
+`/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/topic-{N}-{course-code}-{slug}/intake.md` using `templates/intake-form.md`
 
 All detailed methodology in `intake.md`.

@@ -58,10 +58,29 @@ import yfinance as yf
 
 ## Notebook Structure
 
+### Lab Filename Convention
+`lab_{N}_{short_name}.ipynb` — where `{N}` is the topic number and `{short_name}` is a brief snake_case descriptor (2-4 words max).
+
+Examples: `lab_15_polynomial_trap.ipynb`, `lab_17_logistic_regression.ipynb`, `lab_18_model_evaluation.ipynb`
+
+The HTML companion uses the same name: `lab_{N}_{short_name}.html`
+
+### Solutions Notebook
+
+After writing the student version, produce a **solutions key** with all `___` blanks filled in and all cells executed:
+
+- **Filename:** `solutions/lab_{N}_{short_name}_solutions.ipynb`
+- **Content:** Identical to student version but with all TODO/blanks completed with correct answers
+- **Outputs:** All cells executed so expected outputs are visible
+- **Location:** `{base}/{slug}/solutions/` subfolder (not distributed to students)
+
+The solutions notebook is the instructor's answer key for grading and in-class walkthroughs.
+
 ### Cell 1: Title Block (markdown)
+**IMPORTANT:** Do NOT include the course title (e.g., "ECON 3916" or "ECON 5200") in the notebook. The same lab is used across multiple course sections. Use only the topic title.
+
 ```markdown
 # Lab {N}: {topic_title}
-## {course_title}
 
 **Objectives:** By the end of this lab, you will be able to:
 1. {hands-on objective 1 — implement/calculate/estimate}
@@ -271,7 +290,43 @@ The lab skeleton is written as `templates/lab-notebook.py` using jupytext format
 ```bash
 jupytext --to notebook lab-notebook.py
 # Or directly:
-jupytext --to ipynb templates/lab-notebook.py -o output/{slug}/lab.ipynb
+jupytext --to ipynb templates/lab-notebook.py -o /Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/lab_{N}_{short_name}.ipynb
 ```
 
-When writing `output/{slug}/lab.ipynb`, produce fully executed notebook output (show results of each cell) so students can see expected output before running.
+When writing `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/lab_{N}_{short_name}.ipynb`, produce fully executed notebook output (show results of each cell) so students can see expected output before running.
+
+## ⚠️ Critical: Validate JSON after writing lab_{N}_{short_name}.ipynb
+
+Jupyter notebooks are JSON files. Any literal `"` double-quote inside a markdown cell source string MUST be escaped as `\"`, or the file will be corrupted and unopenable in VS Code and Colab.
+
+**Common failure:** markdown cells with quoted speech inside italics, e.g.:
+```
+*"Your model proves X is irrelevant"*   ← the " breaks the JSON string
+```
+
+**After writing lab_{N}_{short_name}.ipynb, always run:**
+```bash
+python3 -c "import json; json.load(open('/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/lab_{N}_{short_name}.ipynb')); print('✓ valid JSON')"
+```
+
+If invalid, the error message shows the exact line number. Fix by escaping bare `"` as `\"` inside the JSON string. Re-validate before proceeding.
+
+## ⚠️ Lab Execution Validation
+
+After JSON validation passes, execute the notebook end-to-end to verify all cells run without errors:
+
+```bash
+cd "{base}/{slug}"
+jupyter nbconvert --to notebook --execute lab_{N}_{short_name}.ipynb \
+  --output lab_{N}_{short_name}_executed.ipynb \
+  --ExecutePreprocessor.timeout=120 \
+  --ExecutePreprocessor.kernel_name=python3 2>&1
+```
+
+**If execution succeeds:** Replace the original with the executed version (which includes cell outputs). Students will see expected outputs before running. Print: "✓ Lab notebook executed successfully — all cells ran, outputs embedded."
+
+**If execution fails:** Print the error, identify the failing cell, fix the code, and re-execute. Do not proceed to the HTML companion until the notebook runs cleanly.
+
+**If `jupyter nbconvert --execute` is unavailable** (missing package): Note "⚠️ Lab not auto-executed. Manual execution required before teaching." and proceed — do not block the pipeline.
+
+**Exercise cells with `___` blanks:** These will fail during execution (by design — students fill them in). Before executing, temporarily replace `___` with valid placeholder values, execute, then restore the blanks. Or skip execution of exercise cells by marking them with `# SKIP_EXECUTION` and using `--ExecutePreprocessor.allow_errors=True`.

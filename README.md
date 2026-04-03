@@ -1,214 +1,285 @@
-# econ-lecture-prep
+# econ-lecture-plan
 
-A Claude Code skill system for end-to-end economics lecture preparation — from structured intake to polished, textbook-style lecture notes with in-class discussions, class polls, and optional Jupyter labs. Built for economics professors, PhD instructors, and teaching assistants who want research-grade pedagogy without the 6-hour prep time.
-
-**6 skills across 4 stages + standalone interactive tools. Textbook-quality output. Real data only. Always 2024–2026 examples.**
+A Claude Code skill system for economics lecture preparation. Two pipelines: convert textbook chapters into lecture materials (`/lfc`) or build lectures from scratch (`/lecture-prep`). Includes a lecture viewer web app (replaces Canva), slide manager CLI, and auto-deploy to GitHub Pages.
 
 > Companion to [econ-research-os](https://github.com/RyanPiao/econ-research-os). Works standalone.
 
 ---
 
-## What this does
+## Two Pipelines
+
+### `/lfc` — Textbook to Lecture (recommended)
+
+Converts a completed textbook chapter into a full lecture package. Only 2 inputs required.
 
 ```
-Intake → Brainstorm → Peer Review → Draft → [Interactive Elements]
+/lfc ch14 --course econ1116
 ```
 
-| Stage | What happens | Command |
-|-------|-------------|---------|
-| **0. Full pipeline** | Run all 4 stages end-to-end automatically | `/lecture-prep` |
-| **1. Intake** | Collect course, topic, audience, class type | `/new-lecture` |
-| **2. Brainstorm** | Generate theory + fresh 2024–2026 examples + interactive blueprint | `/brainstorm-lecture` |
-| **3. Peer Review** | 3-persona critique: Pedagogy Expert, Domain Economist, Industry Practitioner | `/review-lecture` |
-| **4. Draft** | Textbook-style notes with discussions + polls + optional Jupyter lab | `/draft-lecture` |
-| **Interactive** | Standalone discussion questions, class polls, facilitation guides | `/class-discussion` `/class-poll` `/discussion-guide` |
+| Stage | What happens |
+|-------|-------------|
+| 1. Intake + Detect | Auto-derive metadata from textbook frontmatter + course code |
+| 2. Extract + Adapt | Parse chapter, build teaching plan, Presentation Expert review |
+| 3. Generate Lecture | Textbook-quality notes + retrieval practice + exit ticket + optional lab |
+| 4. Generate Figures | Reuse textbook images or generate new (min 3) |
+| 5. Build Slides + Viewer | RevealJS deck + viewer web app |
+| 6. Finalize | Knowledge snapshot + quality gate + NotebookLM podcast |
 
-### Output for every lecture
+### `/lecture-prep` — From Scratch (legacy)
+
+Builds lectures with web search, brainstorming, and 3-persona peer review. Use when no textbook exists.
 
 ```
-output/{course}-topic-{N}-{slug}/
-├── intake.md              # Structured inputs
-├── brainstorm.md          # Full content blueprint (post-review)
-├── review-report.md       # 3-reviewer feedback record
-├── lecture-notes.md       # Textbook-quality notes with discussions & polls
-├── discussion-guide.md    # Instructor facilitation guide (optional)
-└── lab.ipynb              # Jupyter lab (if class type includes lab)
+/lecture-prep
 ```
+
+| Stage | What happens |
+|-------|-------------|
+| 1-2 | Intake + Knowledge check |
+| 3-4 | Web search brainstorm + 3-persona review |
+| 5-6 | Draft notes + Interview questions |
+| 7-10 | Figures + Snapshot + RevealJS + NotebookLM |
 
 ---
 
-## Quickstart (5 minutes)
+## Quick Start
 
-### 1. Clone the repo
-
-```bash
-git clone https://github.com/YOUR_USERNAME/econ-lecture-prep.git
-cd econ-lecture-prep
-```
-
-### 2. Copy skills to Claude Code
+### 1. Clone and install
 
 ```bash
-# macOS / Linux
+git clone https://github.com/RyanPiao/econ-lecture-plan.git
+cd econ-lecture-plan
+
+# Symlink skills to Claude Code
 mkdir -p ~/.claude/skills
-cp -R skills/* ~/.claude/skills/
+for skill in skills/*/; do
+  ln -sf "$(pwd)/$skill" ~/.claude/skills/"$(basename $skill)"
+done
 
-# Windows (PowerShell)
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\skills"
-Copy-Item -Recurse -Force skills\* "$env:USERPROFILE\.claude\skills\"
-```
-
-### 3. Install Python dependencies (for lab component)
-
-```bash
+# Python dependencies (for labs + figures)
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-# Or with uv (faster):
-uv pip install -r requirements.txt
 ```
 
-### 4. Open Claude Code in this directory
+### 2. Open Claude Code
 
 ```bash
 claude .
 ```
 
-### 5. Run the pipeline
+### 3. Prepare a lecture from a textbook chapter
 
 ```
-/lecture-prep
+/lfc /path/to/ch14-labor-markets.md --course econ1116
 ```
 
-Claude will prompt you for:
-- Course title and topic
-- Class length and type (presentation / lab / both)
-- Audience level
-- Any supporting materials (optional)
-
-Then it runs everything automatically. Total time: 10–20 minutes for a complete lecture package.
+That's it. The pipeline runs all 6 stages automatically and produces everything in `econ-lecture-material/econ1116-principles-micro/ch14-econ1116-labor-markets-human-capital-inequality/`.
 
 ---
 
-## Key Design Decisions
+## Using It for Different Classes
 
-**1. Always fresh.** Every brainstorm searches the web for 2024–2026 examples regardless of whether supporting documents are provided. Examples older than 2024 are flagged and replaced automatically.
+### Course Code Mapping
 
-**2. Three-reviewer rigor.** Every lecture goes through Pedagogy Expert, Domain Economist, and Industry Practitioner review before drafting. Feedback is categorized as `must-fix`, `should-fix`, or `nice-to-have`.
+The pipeline auto-detects course type and adapts all output:
 
-**3. Textbook quality.** Output reads like a well-written textbook chapter — complete paragraphs, interpreted equations, full speaking notes. Not bullet-point slides.
+| Course Code | Course Name | Type | Class Format |
+|-------------|-------------|------|-------------|
+| `econ1115` | Principles of Macroeconomics | Qualitative | Presentation + Activity |
+| `econ1116` | Principles of Microeconomics | Qualitative | Presentation + Activity |
+| `econ1916` | Game Theory (Intro) | Qualitative | Presentation + Activity |
+| `econ2316` | Microeconomic Theory | Qualitative | Presentation + Activity |
+| `econ2560` | Econometrics | Quantitative | Presentation + Lab |
+| `econ3442` | Finance | Quantitative | Presentation + Lab |
+| `econ3916` | Applied Data Analytics | Quantitative | Presentation + Lab |
+| `econ4681` | Game Theory (Advanced) | Quantitative | Presentation + Activity |
+| `econ5200` | Applied Data Analytics (Masters) | Quantitative | Presentation + Lab |
 
-**4. In-class interactivity is non-negotiable.** Every lecture includes:
-- Tiered discussion questions at Bloom's Levels 2 (Understanding), 4 (Analysis), and 6 (Evaluation) for each major concept
-- Mentimeter/iClicker-compatible poll questions with 4 options, answer keys, and reveal scripts
-- Discussion debrief notes with bridging sentences
-- A standalone `/discussion-guide` command for facilitation guides
+### What Changes by Course Type
 
-**5. Consulting-ready labs.** Lab code is portfolio-quality with deep comments explaining both the technical mechanics and the economic intuition. Real data from FRED, World Bank, Kaggle. Always HC3 robust standard errors.
+| Element | Qualitative | Quantitative |
+|---------|------------|-------------|
+| Worked examples | Graphical + simple algebra | Step-by-step computation |
+| Code bridges | Excel formulas | Python (sklearn, statsmodels) |
+| Discussions | Policy debates, multiple valid positions | Method tradeoffs, "what goes wrong if?" |
+| Labs | None (activities instead) | Jupyter + HTML companion + solutions |
+| Figures | Supply/demand, game matrices | Scatter plots, ROC curves |
 
-**6. Real data only.** No `np.random.seed(42)` fake data in main exercises. Always source from public institutional datasets.
+### Override Auto-Detection
 
-**7. Student engagement first.** Every topic opens with a hook from 2024–2026. Examples use companies and phenomena students actually care about. Every concept includes how practitioners use it to solve real business problems.
+```bash
+# Principles course needs a lab day
+/lfc ch05 --course econ1116 --type "presentation + lab"
 
-**8. Slim routers, rich methodology.** SKILL.md files are under 50 lines — just metadata and routing. Detailed logic lives in companion .md files loaded on demand.
+# Stats course needs a debate day
+/lfc ch12 --course econ3916 --type "presentation + activity"
 
-**9. Plain markdown everywhere.** Git-tracked, portable, works in any editor or IDE.
+# Longer class
+/lfc ch14 --course econ1116 --duration 100
+```
 
-**10. Pipeline-first, modular-always.** `/lecture-prep` runs everything. Each stage can also be invoked standalone for iteration.
+### New Course Not in the Mapping Table
+
+The pipeline will scan the chapter for keyword density (qualitative vs quantitative) and ask you to confirm. To add a permanent mapping, edit `skills/chapter-to-lecture/intake-detect.md`.
 
 ---
 
-## Example Usage
+## Next Session Guide
 
-### Preparing a lecture from scratch
+When you start a new Claude Code session in this project:
 
-```
-/lecture-prep
-
-> Course: ECON 5200: Applied Data Analytics in Economics
-> Topic: Instrumental Variables
-> Topic number: 8 of 14
-> Class length: 75 minutes
-> Class type: presentation + lab
-> Audience: masters
-> Supporting materials: [attach slides or paste textbook excerpt]
-```
-
-→ Produces `output/econ5200-topic-08-instrumental-variables/` with all files.
-
-### Generating discussion questions for an existing lecture
+### Prepare a lecture
 
 ```
-/class-discussion instrumental variables endogeneity
+/lfc /path/to/chapter.md --course econ1116
 ```
 
-→ Produces 9 questions (3 per concept, Bloom's Levels 2/4/6) with facilitation notes.
+The pipeline runs end-to-end. If interrupted, re-run the same command — it resumes from where it stopped.
 
-### Creating a poll set for Mentimeter
+### After the pipeline finishes
 
-```
-/class-poll ridge and lasso regression
-```
-
-→ Produces 4 poll questions in Mentimeter-ready format with reveal scripts.
-
-### Enhancing an existing lecture's interactive elements
-
-```
-/class-discussion --enhance output/econ5200-topic-08-instrumental-variables/lecture-notes.md
+```bash
+# Present locally
+cd econ-lecture-material/econ1116-principles-micro/ch14-econ1116-labor-markets/
+./viewer/serve.sh
+# Open http://localhost:8080/viewer/index.html
 ```
 
-→ Reads the lecture notes and adds or improves all discussion/poll sections.
+### Edit slides
+
+```bash
+# List slides
+./slide-manager.sh list
+
+# Add a PNG as a slide
+./slide-manager.sh add-png new-chart.png --after 12
+
+# Add from template
+./slide-manager.sh add content-figure --title "MRP Curve" --image figures/mrp.png --after 5
+
+# Edit a specific slide
+./slide-manager.sh edit 8
+
+# Remove a slide
+./slide-manager.sh remove 14
+```
+
+### Add NLM review slides (after audio finishes ~30 min)
+
+```
+/add-nlm-slides .
+```
+
+### Deploy to GitHub Pages for students
+
+```bash
+# First time: set up the course repo
+# (see skills/lecture-viewer/deploy-github-pages.md)
+
+# Auto-sync: any edit auto-pushes to GitHub Pages
+./auto-sync.sh start
+
+# Now any change you make appears at:
+# https://yourusername.github.io/econ1116-lectures/ch14/viewer/index.html
+```
+
+### Keyboard shortcuts in the viewer
+
+| Key | Action |
+|-----|--------|
+| Right / Space | Next slide |
+| Left | Previous slide |
+| G + number | Jump to slide |
+| P | Presenter mode (notes + timer) |
+| U | Student mode (clean) |
+| O | Overview (thumbnail grid) |
+| W | Open student window (dual monitor) |
+| T | Toggle timer |
+| L | Laser pointer |
+| B | Black screen |
+| F | Fullscreen |
+| ? | Help |
 
 ---
 
-## Repo Structure
+## Output Structure
+
+Output is organized by course:
 
 ```
-econ-lecture-prep/
-├── README.md
-├── TUTORIAL.md                      # Full walkthrough: IV lecture example
-├── LICENSE
-├── requirements.txt
-│
-├── .claude/
-│   └── settings.json                # Permissions
-│
-├── skills/
-│   ├── lecture-pipeline/            # /lecture-prep — orchestrator
-│   ├── lecture-intake/              # /new-lecture
-│   ├── lecture-brainstorm/          # /brainstorm-lecture
-│   ├── lecture-review/              # /review-lecture
-│   ├── lecture-draft/               # /draft-lecture
-│   └── lecture-interactive/         # /class-discussion /class-poll /discussion-guide
-│
-├── output/                          # Generated lectures go here
-│
-├── docs/
-│   ├── architecture.md              # 10 design principles
-│   └── best-practices.md            # Usage guidance
-│
-└── examples/                        # Full IV lecture example outputs
-    ├── sample-intake.md
-    ├── sample-brainstorm.md
-    ├── sample-review.md
-    ├── sample-lecture-output.md
-    ├── sample-discussion-guide.md
-    └── sample-polls.md
+econ-lecture-material/
+├── econ1116-principles-micro/
+│   └── ch14-econ1116-labor-markets-human-capital-inequality/
+│       ├── intake.md                   Inputs + auto-derived metadata
+│       ├── chapter-extract.md          Teaching plan + Expert recommendations
+│       ├── lecture-notes.md            Textbook-quality notes
+│       ├── figures/                    PNGs (150 DPI, alt text)
+│       ├── presentation.html           RevealJS slides
+│       ├── styles.css                  Slide theme
+│       ├── slides.pdf                  PDF export
+│       ├── screenshots/               Visual review
+│       ├── viewer/                     Lecture viewer web app
+│       │   ├── index.html
+│       │   ├── viewer.js
+│       │   ├── viewer.css
+│       │   └── serve.sh
+│       ├── pipeline-state.json         Resumption tracking
+│       └── media/                      NotebookLM outputs
+├── econ3916-applied-data-analytics/
+│   └── ...
+```
+
+---
+
+## All Commands
+
+| Command | Description |
+|---------|-------------|
+| `/lfc [chapter] --course [code]` | Textbook → lecture (6 stages) |
+| `/lecture-prep` | From-scratch lecture (10 stages) |
+| `/build-viewer [dir]` | Generate viewer for existing slides |
+| `/add-nlm-slides [dir]` | Append NLM PNGs as review slides |
+| `/deploy-lecture [dir]` | Push to GitHub Pages |
+| `/class-discussion [topic]` | Standalone discussion questions |
+| `/class-poll [topic]` | Standalone poll questions |
+| `/discussion-guide [path]` | Facilitation guide from notes |
+
+---
+
+## Skills (11 total)
+
+```
+skills/
+├── chapter-to-lecture/         /lfc — 6-stage textbook→lecture pipeline
+├── lecture-viewer/             Viewer + slide manager + deploy
+├── lecture-pipeline/           /lecture-prep — 10-stage legacy pipeline
+├── lecture-intake/             /new-lecture
+├── lecture-knowledge-check/    Knowledge base deconfliction
+├── lecture-brainstorm/         /brainstorm-lecture
+├── lecture-review/             /review-lecture (3-persona)
+├── lecture-draft/              /draft-lecture + lab generation
+├── lecture-interactive/        /class-discussion /class-poll
+├── lecture-interview/          Interview questions (legacy)
+└── lecture-snapshot/           Knowledge snapshots
 ```
 
 ---
 
 ## Requirements
 
-- Claude Code (claude.ai/claude-code or the CLI)
-- Python 3.10+ (for lab component)
-- Packages: see `requirements.txt`
-- Optional: FRED API key (free at fred.stlouisfed.org) for macroeconomic data in labs
+- [Claude Code](https://claude.ai/code) (CLI, desktop app, or VS Code extension)
+- Python 3.10+ with virtualenv
+- Node.js (for RevealJS scaffold + overflow checker)
+- `beautifulsoup4` (for slide manager)
+- `fswatch` (for auto-sync, macOS built-in)
+- Optional: `notebooklm-py` (for podcast generation)
+- Optional: FRED API key (for macro data in labs)
 
 ---
 
 ## See also
 
-- [TUTORIAL.md](TUTORIAL.md) — Complete walkthrough with a master's-level Instrumental Variables lecture
-- [docs/architecture.md](docs/architecture.md) — Design decisions explained
-- [docs/best-practices.md](docs/best-practices.md) — Tips for getting the best output
-- [econ-research-os](https://github.com/RyanPiao/econ-research-os) — Companion research workflow system
+- [econ-research-os](https://github.com/RyanPiao/econ-research-os) — Research workflow system
+- `skills/lecture-viewer/deploy-github-pages.md` — GitHub Pages setup guide
+- `skills/chapter-to-lecture/pipeline.md` — Detailed pipeline logic

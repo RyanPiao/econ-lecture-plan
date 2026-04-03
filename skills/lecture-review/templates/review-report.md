@@ -2,7 +2,7 @@
 
 **Topic:** {topic_title}
 **Course:** {course_title}
-**Brainstorm reviewed:** `output/{slug}/brainstorm.md`
+**Brainstorm reviewed:** `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/brainstorm.md`
 **Review date:** {date}
 
 ---
@@ -90,4 +90,4 @@
 
 ---
 
-*This review report is a permanent record. The revised brainstorm used for drafting is at `output/{slug}/brainstorm.md`.*
+*This review report is a permanent record. The revised brainstorm used for drafting is at `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/brainstorm.md`.*

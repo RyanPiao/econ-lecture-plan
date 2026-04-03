@@ -14,6 +14,7 @@ topic_title: "{topic_title}"
 topic_number: {topic_number}
 total_topics: {total_topics}
 position_context: "{early | middle | late}"
+course_category: "{ml-stats | game-theory | micro-theory | principles | finance | general}"
 ```
 
 ## Class Parameters

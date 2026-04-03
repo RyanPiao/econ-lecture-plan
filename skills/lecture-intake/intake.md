@@ -38,6 +38,23 @@ Use the topic number relative to the total to calibrate depth and tone:
 | Middle | Topics 4 to N–3 | Building — can reference prior topics, increase formalism progressively |
 | Late | Topics N–2 to N | Advanced — assume strong foundation, emphasize synthesis, integration, and real-world application |
 
+### Step 3b: Detect Course Category
+
+Infer `course_category` from `course_title` keywords (case-insensitive match). This field controls which content adaptations are active in all downstream stages.
+
+| Keywords in course_title | course_category |
+|--------------------------|-----------------|
+| machine learning, ML, statistical learning, data analytics, econometrics | `ml-stats` |
+| game theory, strategic, information economics | `game-theory` |
+| microeconomic theory, optimization, equilibrium analysis | `micro-theory` |
+| principles, introduction, intro | `principles` |
+| money, banking, monetary, financial | `finance` |
+| (no keyword match) | `general` |
+
+If multiple keywords match, prefer the more specific category (e.g., "Statistical & Machine Learning" → `ml-stats`, not `general`).
+
+Write `course_category` into the intake form YAML block. All downstream stages read this field.
+
 ### Step 4: Process Supporting Documents
 
 If supporting documents (slides, textbook chapters, PDFs, notes) are provided:
@@ -52,17 +69,17 @@ If no documents are provided, leave `supporting_docs_provided: false` and `suppo
 ### Step 5: Generate Output Slug
 
 Construct the output directory name:
-- Pattern: `{course-code}-topic-{N:02d}-{kebab-case-topic}`
-- Course code: extract or infer from course title (e.g., "ECON 5200" → "econ5200")
+- Pattern: `topic-{N:02d}-{course-code}-{kebab-case-topic}` (topic number FIRST)
 - Topic number: zero-padded to 2 digits
+- Course code: extract or infer from course title (e.g., "ECON 5200" → "econ5200")
 - Topic slug: lowercase, spaces replaced with hyphens, remove special characters
-- Example: `econ5200-topic-08-instrumental-variables`
+- Example: `topic-08-econ5200-instrumental-variables`
 
 ### Step 6: Write Intake Form
 
-Write the completed intake form to `output/{slug}/intake.md` using `templates/intake-form.md`.
+Write the completed intake form to `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/intake.md` using `templates/intake-form.md`.
 
-Confirm to the user: "Intake saved to output/{slug}/intake.md. [If called standalone: run /brainstorm-lecture to continue. | If called from pipeline: proceeding to brainstorm stage...]"
+Confirm to the user: "Intake saved to /Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/intake.md. [If called standalone: run /brainstorm-lecture to continue. | If called from pipeline: proceeding to brainstorm stage...]"
 
 ---
 

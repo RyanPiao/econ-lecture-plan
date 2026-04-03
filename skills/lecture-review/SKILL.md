@@ -6,14 +6,14 @@ description: 3-persona peer review of lecture brainstorm. Reviewers: Pedagogy Ex
 # Lecture Review
 
 Routes:
-- `/review-lecture` → Read `peer-review.md`, run all 3 reviewers, write report to `output/{slug}/review-report.md`, revise brainstorm in place
+- `/review-lecture` → Read `peer-review.md`, run all 3 reviewers, write report to `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/review-report.md`, revise brainstorm in place
 - `/review-lecture --quick` → Run reviews but skip the brainstorm revision step; report only
 
 ## Input
-Reads `output/{slug}/brainstorm.md` and `output/{slug}/intake.md`.
+Reads `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/brainstorm.md` and `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/intake.md`.
 
 ## Output
-- `output/{slug}/review-report.md` — structured feedback from all 3 reviewers + synthesis
-- Revised `output/{slug}/brainstorm.md` — incorporating all `must-fix` and `should-fix` items
+- `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/review-report.md` — structured feedback from all 3 reviewers + synthesis
+- Revised `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/brainstorm.md` — incorporating all `must-fix` and `should-fix` items
 
 All detailed reviewer logic, checklists, and synthesis methodology in `peer-review.md`.

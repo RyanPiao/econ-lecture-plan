@@ -58,6 +58,37 @@ $$
 
 ---
 
+### 🔢 Worked Example
+
+**Data:**
+{Specific numbers — 5–10 data points in a small table or list}
+
+**Step 1:** {First calculation, showing all work}
+**Step 2:** {Next calculation}
+**Step 3:** {Continue as needed}
+
+**Result:** {Final answer with plain-language interpretation}
+
+**Check:** {Sanity check — does this make sense? What if we changed one number?}
+
+**Speaking notes:** {How to present on the board. Where to pause and ask "what do you think comes next?" before revealing.}
+
+---
+
+### 💻 In Code
+
+```{python or excel — based on course_category}
+# {One-line description of what this computes}
+{2–8 lines of clean, runnable code}
+# Output: {what the student will see}
+```
+
+**Speaking notes:** "You don't need to memorize this syntax — you'll use it in the lab. But notice how the equation maps directly to this code."
+
+> 💼 **Interview alert:** {Specific interview question or career context relevant to this concept.}
+
+---
+
 ### Industry Application: {company_name} — {application_title}
 
 **Context:** {1–2 sentences: who the company is and why this problem mattered to them.}
@@ -85,6 +116,25 @@ $$
 **The correction:** {Why it's wrong and what the right understanding is. Be specific.}
 
 **Speaking notes:** {Present this proactively or wait for it to arise? Suggested phrasing for the correction.}
+
+---
+
+### 🎯 Decision Scenario
+
+**Scenario:** {2–3 sentences setting up a realistic decision the student might face}
+
+**Option A:** {Approach 1 with its tradeoff}
+**Option B:** {Approach 2 with its tradeoff}
+
+**The answer depends on:** {1–2 sentences — not "A is always right" but "it depends on your goal/constraints"}
+
+**Speaking notes:** "Show of hands — who picks A? B? Here's why reasonable people disagree..."
+
+> 💼 **Interview alert:** {Second career callout — placed here or at another natural point in the section}
+
+---
+
+*[If transition lecture, add Before vs. After section here using the ↔️ template from draft-presentation.md]*
 
 ---
 

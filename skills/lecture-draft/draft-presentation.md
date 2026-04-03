@@ -19,13 +19,15 @@ Transform the reviewed brainstorm into polished, textbook-quality lecture notes 
 3. Interpret every term in plain English
 4. Explain what happens when parameters change
 
+**Instructor identity:** This system serves an applied economist who bridges classical econometrics with contemporary ML. The teaching philosophy is "Foundations First, Expansion Second" — students build from manual derivations to computational tools. Every concept should have a numerical worked example before abstraction, a code snippet before the lab, and an explicit career connection. Active learning (simulations, case-based exercises, group decision scenarios) is the default. The pipeline adapts its content based on `course_category` from the intake form.
+
 **Speaking notes are sentences, not prompts:** Bad: "Discuss why IV is useful here." Good: "At this point, say: 'So why do we need instrumental variables at all? Here's the problem: if students who attend college are fundamentally different from students who don't — maybe they're more motivated, or come from wealthier families — then just comparing wages for college attendees versus non-attendees tells us about selection, not about the causal return to education. IV solves this by finding variation in college attendance that has nothing to do with those confounders.'"
 
 ---
 
 ## Document Structure
 
-Use this exact structure for `output/{slug}/lecture-notes.md`:
+Use this exact structure for `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/lecture-notes.md`:
 
 ---
 
@@ -112,6 +114,153 @@ $$
 **Why it's wrong:** {The correction. Be specific.}
 
 **Speaking notes:** {Whether to present this proactively or wait for it to come up. Suggested phrasing for the correction.}
+
+---
+
+### 🔢 Worked Example
+
+Walk through the concept with specific numbers — 5 to 10 data points, every calculation shown. This is not the lab; it's a by-hand exercise the instructor works through on the board.
+
+**Adapt by `course_category`:**
+
+| course_category | What the worked example looks like |
+|-----------------|-------------------------------------|
+| `ml-stats` | Compute MSE, bias², variance on 5 data points; or fit a 2-feature OLS by hand and interpret |
+| `game-theory` | Solve a 2×2 payoff matrix: list strategies, find best responses, circle Nash equilibrium |
+| `micro-theory` | Lagrangian optimization with U = x^0.5 · y^0.5, p_x = 2, p_y = 3, I = 120 — solve for x*, y* |
+| `principles` | "If price rises from $5 to $7, quantity drops from 100 to 80. Elasticity = ..." |
+| `finance` | "A bond pays $50/year for 10 years, face value $1000, market rate 6%. Price = ..." |
+| `general` | Numerical example appropriate for the topic using the simplest relevant math |
+
+**Format:**
+```
+**Data:** {the specific numbers — table or list}
+**Step 1:** {first calculation, showing work}
+**Step 2:** {next calculation}
+...
+**Result:** {final answer with plain-language interpretation}
+**Check:** {sanity check — does this make sense? What if we changed X?}
+```
+
+**Speaking notes:** {How to present this on the board. Where to pause and ask "what do you think the next step is?" before revealing.}
+
+---
+
+### 💻 In Code
+
+A short (2–8 line) code snippet showing how this concept looks computationally. Not a full exercise — just a bridge between the math and the lab.
+
+**Adapt by `course_category`:**
+
+| course_category | Language & tools |
+|-----------------|-----------------|
+| `ml-stats` | Python: scikit-learn, statsmodels, numpy |
+| `game-theory` | Python: nashpy, numpy, or sympy |
+| `micro-theory` | Python: sympy for symbolic optimization |
+| `principles` | **Excel formulas**: `=SLOPE()`, `=(B2-B1)/(A2-A1)`, `=PV()` |
+| `finance` | Python (numpy.pv, numpy.irr) or Excel (`=PV()`, `=RATE()`) |
+| `general` | Python with standard libraries |
+
+**Format:**
+```python
+# {One-line description of what this computes}
+{2–8 lines of clean, runnable code}
+# Output: {what the student will see}
+```
+
+**Speaking notes:** "You don't need to memorize this syntax — you'll use it in the lab. But notice how the equation we just derived maps directly to this code."
+
+---
+
+### 🎯 Decision Scenario (at least 1 per lecture)
+
+A structured scenario where students must choose between 2–3 approaches and justify their choice. Not open-ended discussion — constrained decision with explicit tradeoffs.
+
+**Adapt by `course_category`:**
+
+| course_category | Example scenario type |
+|-----------------|-----------------------|
+| `ml-stats` | "n=500, p=50, deadline Friday. Use all features + CV, or pre-select 10? Defend your choice." |
+| `game-theory` | "Player 1 might cooperate or defect. You move second. What's your strategy and why?" |
+| `micro-theory` | "This firm's MC crosses ATC at q=100. A competitor enters. Stay or exit?" |
+| `principles` | "You're the Fed chair. Inflation 5%, unemployment 3%. Raise rates, hold, or cut?" |
+| `finance` | "Yield curve inverted yesterday. You manage a bank portfolio. What do you change?" |
+
+**Format:**
+```
+**Scenario:** {2–3 sentences setting up the decision}
+**Option A:** {approach 1 — with its tradeoff}
+**Option B:** {approach 2 — with its tradeoff}
+**Option C (optional):** {approach 3}
+**The answer depends on:** {1–2 sentences explaining what makes each option right in different contexts}
+```
+
+**Speaking notes:** "I want a show of hands — who would pick A? B? ... Here's why reasonable people disagree..."
+
+---
+
+> 💼 **Interview / Career Callout** (inline, at least 2 per lecture)
+
+Place these inline after key results or misconceptions — not as separate sections. Use this exact format:
+
+> 💼 **Interview alert:** {Specific interview question or career context. E.g., "'Explain bias vs. variance' is the #1 ML screening question at tech companies."}
+
+**Adapt by `course_category`:**
+
+| course_category | Callout style |
+|-----------------|---------------|
+| `ml-stats` | Data science / ML engineer interview questions |
+| `game-theory` | Management consulting case interview connections |
+| `micro-theory` | PhD qualifying exam / econ PhD job market signals |
+| `principles` | Economic literacy for any professional role |
+| `finance` | Investment banking / asset management interview Qs |
+| `general` | Consulting or policy analyst interview connections |
+
+---
+
+### ↔️ Before vs. After (transition lectures only)
+
+**When to include:** If the intake flags this as a paradigm-shift or transition topic (check `depth_calibration` or `topic_title` for keywords: "shift," "introduction to," "from X to Y," "vs.").
+
+Show the SAME data or problem analyzed both ways — the method students already know vs. the method they're learning today.
+
+| course_category | Trigger examples |
+|-----------------|-----------------|
+| `ml-stats` | OLS → regularization, explanation → prediction, parametric → nonparametric |
+| `game-theory` | Static → dynamic, complete → incomplete information |
+| `micro-theory` | Perfect competition → monopoly, no externality → with externality |
+| `principles` | Pre-tax → post-tax, pre-trade → post-trade, before/after price floor |
+| `finance` | Before/after Fed intervention, pre/post rate change |
+
+**Format:**
+```
+**The same problem, two approaches:**
+**Before ({old method}):** {analysis + result}
+**After ({new method}):** {analysis + result}
+**Comparison:** {table showing which metric each method wins on}
+**The insight:** {when to use which — not "new is always better" but "it depends on your goal"}
+```
+
+---
+
+### 📊 Visual Progression Guidance
+
+When a concept builds incrementally (bias-variance tradeoff, supply-demand equilibrium, game tree expansion), design figures as a **layered sequence** rather than standalone images:
+
+- **Figure N-a:** Base layer only (e.g., just the training error line, or just the supply curve)
+- **Figure N-b:** Add second layer (e.g., test error line, or demand curve)
+- **Figure N-c:** Add annotation (e.g., shade generalization gap, mark equilibrium point)
+- **Figure N-d (optional):** Add comparative shift (e.g., shift demand, mark new equilibrium)
+
+In RevealJS slides, these become a slide sequence that builds. In lecture notes, show the final composite figure with a caption noting the build-up order.
+
+| course_category | Example progression |
+|-----------------|---------------------|
+| `ml-stats` | training error → + test error → + gap shaded → + sweet spot marked |
+| `game-theory` | payoff matrix → + best responses highlighted → + Nash equilibrium circled |
+| `micro-theory` | budget constraint → + indifference curves → + tangency → + income effect |
+| `principles` | supply curve → + demand curve → + equilibrium → + curve shift → + new equilibrium |
+| `finance` | money supply → + money demand → + equilibrium rate → + Fed shifts supply |
 
 ---
 
@@ -245,9 +394,14 @@ Before finalizing the draft, verify each of the following:
 
 **Completeness:**
 - [ ] Every core concept from the brainstorm appears in the notes
-- [ ] Every concept has: intuition, formal treatment, industry application, misconception
+- [ ] Every concept has: intuition, formal treatment, worked example, industry application, misconception
 - [ ] Every equation has all terms interpreted
 - [ ] Every industry example has: company, problem, method, quantified outcome, source URL
+- [ ] At least 1 worked example with real numbers per lecture (🔢)
+- [ ] At least 2 code-concept bridges appropriate for the course_category (💻)
+- [ ] At least 2 interview/career callouts inline (💼)
+- [ ] At least 1 decision scenario with 2–3 options and tradeoffs (🎯)
+- [ ] If transition lecture: before/after comparison using same dataset (↔️)
 
 **Interactive elements:**
 - [ ] At least 2 Discussion blocks, each with 3 Bloom's-tiered questions
@@ -265,3 +419,70 @@ Before finalizing the draft, verify each of the following:
 - [ ] Speaking notes are actual sentences, not prompts
 - [ ] Tone is consistent: rigorous but engaging
 - [ ] Math is at the right level for the stated audience
+
+---
+
+## Step 5: Figure Generation
+
+After `lecture-notes.md` is written and passes the quality checklist, generate all charts, tables, and diagrams as PNG files.
+
+### 5.1 — Identify figures to generate
+
+Re-read `lecture-notes.md` and collect every item that is:
+- A **markdown table** already present in the notes → render as a styled image
+- A **chart or graph** described in prose (e.g., "the following figure shows GDP growth over time")
+- A **conceptual diagram** implied by the content (supply/demand curves, IS-LM, causal DAGs, regression scatter plots, ROC curves, confusion matrices, etc.)
+- An **equation visualization** where a graph would aid understanding
+
+Assign each a sequential number and a short slug: `figure_001_supply-demand`, `figure_002_ols-coefficients`, etc.
+
+### 5.2 — Generate each figure
+
+For each figure, write and execute a Python script using the project virtualenv:
+```bash
+VENV='/Users/openclaw/Resilio Sync/Documents/econ-lecture-plan/.venv'
+$VENV/bin/python figure_script.py
+```
+
+Use these libraries as appropriate:
+- **matplotlib** — curves, scatter plots, bar charts, table images (`matplotlib.table`)
+- **plotly** (exported as PNG via `plotly.io.write_image`) — interactive-style charts
+- **numpy/pandas** — data generation for illustrative examples
+- **networkx** — causal DAGs and directed graphs
+
+Save each figure to `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/figures/figure_NNN_slug.png` at 150 dpi minimum, 8×5 inches default size.
+
+Example for a supply-demand diagram:
+```python
+import matplotlib.pyplot as plt, numpy as np
+fig, ax = plt.subplots(figsize=(7, 5))
+q = np.linspace(0, 10, 100)
+ax.plot(q, 10 - q, label='Demand', color='steelblue', linewidth=2)
+ax.plot(q, 2 + q, label='Supply', color='coral', linewidth=2)
+ax.set_xlabel('Quantity'); ax.set_ylabel('Price')
+ax.legend(); ax.set_title('Supply and Demand Equilibrium')
+plt.tight_layout()
+plt.savefig('/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/figures/figure_001_supply-demand.png', dpi=150)
+plt.close()
+```
+
+### 5.3 — Insert figure references into lecture-notes.md
+
+After all figures are generated, update `lecture-notes.md` to embed each figure at the correct location:
+```markdown
+![Figure 1: Supply and Demand Equilibrium](figures/figure_001_supply-demand.png)
+*Figure 1: At equilibrium, quantity supplied equals quantity demanded at price P\*.*
+```
+
+Place the image reference immediately after the paragraph or equation it illustrates.
+
+### 5.4 — Output
+
+```
+/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/figures/
+├── figure_001_supply-demand.png
+├── figure_002_ols-table.png
+└── ...
+```
+
+`lecture-notes.md` is updated in-place with all `![Figure N](figures/...)` references inserted.

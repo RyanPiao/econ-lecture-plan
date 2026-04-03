@@ -1,15 +1,58 @@
 # Brainstorm Methodology
 
 ## Purpose
-Transform the structured intake into a rich, organized brainstorm that serves as the blueprint for the final lecture. The brainstorm must be comprehensive enough that Stage 4 (Draft) can produce polished lecture notes without any additional research.
+Transform the structured intake into a rich, organized brainstorm that serves as the blueprint for the final lecture. The brainstorm must be comprehensive enough that Stage 5 (Draft) can produce polished lecture notes without any additional research.
 
 ---
 
 ## Process
 
+### Step 0: Load Knowledge Context (hard gate)
+
+**0a. Check for prior snapshots.**
+List files in `/Users/openclaw/Resilio Sync/Documents/econ-lecture-knowledge/lectures/` matching the current course code (e.g., `topic-*-econ3916-econ5200-*`). Determine whether any snapshots exist for this course.
+
+**0b. Branch on result:**
+
+**If snapshots exist for this course AND `knowledge-context.md` exists at `{base}/{slug}/knowledge-context.md`:**
+Read it fully. This file contains:
+- **Do Not Reuse** — companies, datasets, example types, and discussion frames used in prior topics of this course. These are **prohibited** in this brainstorm. Do not use them even if they seem perfect for the topic.
+- **Honor These Forward Seeds** — promises made to students in prior lectures. This brainstorm must deliver on these.
+- **Notation Conventions** — symbols already established in this course. You must use exactly the same notation.
+- **Activate These Backward Links** — prior concepts students should recall. Reference them explicitly.
+- **Paper Snapshot Intelligence** — companies and datasets from your research papers. Avoid reusing the same companies if possible; cite paper insights where relevant as "cutting-edge research" examples.
+- **Research Synthesis Insights** — findings from your own research that could make the lecture richer. Use these as discussion prompts or industry examples where they fit naturally.
+- **Fresh Territory Available** — example types, industries, or framings not yet used (checked across lectures, papers, AND research). Prioritize these.
+
+Keep this context active throughout all brainstorm steps. It overrides your default example preferences.
+
+**If snapshots exist for this course BUT `knowledge-context.md` does NOT exist:**
+**STOP. Do not proceed with brainstorming.** Print the following error and halt:
+
+~~~
+❌ BLOCKED: Knowledge Base Check was skipped.
+
+Prior lecture snapshots exist for this course in /Users/openclaw/Resilio Sync/Documents/econ-lecture-knowledge/lectures/,
+but no knowledge-context.md was found at {base}/{slug}/knowledge-context.md.
+
+This means Stage 2 (Knowledge Check) did not run. Proceeding without it
+would risk reusing examples, breaking notation consistency, or missing
+forward seeds promised to students in prior lectures.
+
+Fix: Run the knowledge check first, then re-run the brainstorm.
+  → /knowledge-check (or restart /lecture-prep from Stage 2)
+~~~
+
+Do not generate any brainstorm content. Wait for the user to run the knowledge check.
+
+**If NO snapshots exist for this course:**
+Proceed without constraints — this is the first lecture for this course. Note in the brainstorm header: *"No prior snapshots found for this course; no consistency constraints applied."*
+
+---
+
 ### Step 1: Read Intake
 
-Load `output/{slug}/intake.md`. Extract:
+Load `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/intake.md`. Extract:
 - `class_type`, `class_length_minutes`, `audience_level`
 - `topic_title`, `topic_number`, `total_topics`
 - `supporting_docs_summary` and `flagged_outdated_examples`
@@ -69,6 +112,22 @@ For each `flagged_outdated_example`, search for the 2024–2026 equivalent and r
 6. Quality tech/business press: HBR, MIT Tech Review, Wired (data stories)
 
 **Never use:** Blog posts without institutional backing, Wikipedia as a primary source, social media posts, or unverifiable claims.
+
+### Step 3b: Validate Sources
+
+Before structuring the brainstorm, verify every source found in Step 3. For each:
+
+1. **URL resolves:** Attempt to fetch the URL (WebFetch or WebSearch). If 403/404/timeout, flag as ⚠️ and find an alternative from the same credibility tier.
+2. **Date is 2024+:** Check the article's actual publication date (not just the search snippet). Flag anything pre-2024 unless historically significant (e.g., Zillow 2021 iBuying failure).
+3. **Statistics match:** For key numbers (revenue, %, market size), cross-check against a second source or the primary data provider (FRED, BLS, company SEC filing, earnings transcript).
+4. **Company + application is real:** Verify the company actually uses the described method — check their engineering blog, press releases, or earnings calls.
+
+Output a validation summary for each source:
+- ✓ verified (URL + date + stat confirmed)
+- ⚠️ partially verified (URL works but stat couldn't be cross-checked — acceptable)
+- ❌ failed (URL broken or claim unverifiable) — **must find replacement before proceeding**
+
+**All ❌ sources must be replaced before proceeding to Step 4.**
 
 ### Step 4: Structure the Brainstorm
 
@@ -195,6 +254,6 @@ Before writing the brainstorm document, verify:
 
 ### Step 6: Write Output
 
-Write the completed brainstorm to `output/{slug}/brainstorm.md` using `templates/brainstorm-output.md`.
+Write the completed brainstorm to `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/brainstorm.md` using `templates/brainstorm-output.md`.
 
-Confirm: "Brainstorm saved to output/{slug}/brainstorm.md. [If standalone: run /review-lecture to continue. | If pipeline: proceeding to peer review...]"
+Confirm: "Brainstorm saved to /Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/brainstorm.md. [If standalone: run /review-lecture to continue. | If pipeline: proceeding to peer review...]"

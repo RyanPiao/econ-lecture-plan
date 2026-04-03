@@ -8,8 +8,8 @@ Critically evaluate the brainstorm from three expert perspectives and produce ac
 ## Setup
 
 Read both:
-- `output/{slug}/intake.md` — to understand the constraints (audience level, class time, class type)
-- `output/{slug}/brainstorm.md` — the document being reviewed
+- `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/intake.md` — to understand the constraints (audience level, class time, class type)
+- `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/brainstorm.md` — the document being reviewed
 
 Run the three reviews **sequentially** in the order listed below. Each reviewer reads the full brainstorm with fresh eyes.
 
@@ -211,17 +211,17 @@ Aggregate all issues across the three reviewers. Assign final priority:
 - `nice-to-have`: Optional enhancements. Note but do not necessarily implement.
 
 ### Step 2: Revise the Brainstorm
-Apply all `must-fix` and `should-fix` changes directly to `output/{slug}/brainstorm.md`. Track changes by adding a brief note at the top of the brainstorm:
+Apply all `must-fix` and `should-fix` changes directly to `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/brainstorm.md`. Track changes by adding a brief note at the top of the brainstorm:
 ```
 <!-- Revised after peer review: {date}. Applied {N} must-fix, {N} should-fix changes. -->
 ```
 
 ### Step 3: Write the Review Report
-Write `output/{slug}/review-report.md` using `templates/review-report.md`. Include:
+Write `/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{slug}/review-report.md` using `templates/review-report.md`. Include:
 - Full text of all three reviews
 - Synthesis table with all issues categorized
 - Summary of changes made to brainstorm
 - List of `nice-to-have` items not incorporated (with brief rationale)
 
 ### Step 4: Handoff
-Pass the revised brainstorm to Stage 4 (Draft). The review report is a permanent record — do not modify it after this point.
+Pass the revised brainstorm to Stage 5 (Draft). The review report is a permanent record — do not modify it after this point.
