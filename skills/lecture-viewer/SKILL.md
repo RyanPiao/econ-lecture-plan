@@ -1,6 +1,11 @@
 ---
 name: lecture-viewer
 description: Self-contained lecture viewer web app wrapping RevealJS. Presenter mode, dual-monitor sync, timer with pace indicator, laser pointer, 3 WCAG-compliant themes. Slide manager CLI for safe editing. Auto-sync to GitHub Pages. Replaces Canva.
+user_invocable:
+  - /build-viewer [lecture-dir] — Generate viewer for existing RevealJS presentation
+  - /add-nlm-slides [lecture-dir] — Append NotebookLM slide PNGs as review slides
+  - /deploy-lecture [lecture-dir] — Push lecture to GitHub Pages repo
+  - /deploy-course [course-code] — Push all lectures for a course
 ---
 
 # Lecture Viewer

@@ -1,6 +1,9 @@
 ---
 name: chapter-to-lecture
 description: Convert textbook chapters into lecture materials — notes, slides, labs, figures, and viewer app. Auto-detects course type, runs Presentation Expert review, deploys to GitHub Pages. 6-stage pipeline. Trigger: /lecture-from-chapter or /lfc
+user_invocable:
+  - /lecture-from-chapter [chapter-path] --course [code] — Run full 6-stage pipeline
+  - /lfc [chapter-path] --course [code] — Alias for /lecture-from-chapter
 ---
 
 # Chapter-to-Lecture Pipeline
