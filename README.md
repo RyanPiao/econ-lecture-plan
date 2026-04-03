@@ -13,7 +13,7 @@ A Claude Code skill system for economics lecture preparation. Two pipelines: con
 Converts a completed textbook chapter into a full lecture package. Only 2 inputs required.
 
 ```
-/lfc ch14 --course econ1116
+/lfc ch1 --course econ1116
 ```
 
 | Stage | What happens |
