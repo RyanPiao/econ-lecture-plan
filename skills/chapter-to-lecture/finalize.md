@@ -141,6 +141,35 @@ VENV="/Users/openclaw/Resilio Sync/Documents/econ-lecture-plan/.venv"
    "
    ```
 
+### What the NLM auto-chain does (background, ~30-45 min total)
+
+The `nlm_auto_chain.sh` script runs these phases automatically after launch:
+
+1. **Phase 2 — Download podcast:** Wait for Deep Dive audio to finish → download `{slug}-podcast.m4a` → Whisper transcription → 3 transcript parts
+2. **Phase 3 — Generate NLM slides:** Upload 3 transcript parts as sources → generate 3 slide decks (academic style, white background, Open Sans) → wait for completion
+3. **Phase 4 — Download + post-process:**
+   - Download 3 slide PDFs from NLM
+   - **Remove watermarks** from PDFs (pymupdf)
+   - **Export 4K PNGs** from each PDF (`pdf_to_slides_png.py --dpi 300` → 6000×3375px)
+   - Output: `media/slides_part{1,2,3}/page_*.png`
+4. **macOS notification** on completion (or failure notification via trap)
+
+### After NLM chain finishes
+
+Run `/add-nlm-slides` to append the 4K NLM PNGs as bonus review slides to `presentation.html`. Or use:
+```bash
+./slide-manager.sh add-png media/slides_part1/page_001.png --after 25
+```
+to cherry-pick specific NLM slides.
+
+### Manual fallbacks if auto-chain fails
+
+```
+/nlm-p2 {base}/{slug}/   ← download podcast + Whisper transcription
+/nlm-p3 {base}/{slug}/   ← upload transcripts + generate 3 slide decks
+/nlm-p4 {base}/{slug}/   ← download PDFs + remove watermarks + export 4K PNGs
+```
+
 ---
 
 ## Pipeline Completion

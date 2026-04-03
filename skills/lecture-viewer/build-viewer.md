@@ -45,6 +45,16 @@ Copy templates from `skills/lecture-viewer/templates/` and inject lecture-specif
 
 **viewer/serve.sh** — copy `templates/serve.sh` as-is (make executable)
 
+**slide-manager.sh** — copy `scripts/slide-manager.sh` to `{base}/{slug}/slide-manager.sh` (make executable)
+**slide-manager.py** — copy `scripts/slide-manager.py` to `{base}/{slug}/slide-manager.py`
+
+This puts the slide manager directly in the lecture directory so the instructor can run:
+```bash
+cd econ-lecture-material/econ1116-principles-micro/ch14-econ1116-labor-markets/
+./slide-manager.sh list
+./slide-manager.sh add-png new-chart.png --after 12
+```
+
 ### 4. Post-build validation
 
 ```bash

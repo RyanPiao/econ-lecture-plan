@@ -127,10 +127,19 @@ Transform chapter extract into textbook-quality lecture notes. Generate interact
 
 From `lecture-notes.md`, identify all tables, charts, diagrams, equation visualizations.
 
-**Check for reusable textbook figures:**
-- Scan `ebook/public/images/chapters/ch{NN}/` for existing images
-- If a figure matches (correct subject, white background, aspect ratio 1.3-1.6): reuse it (copy to `figures/`)
-- Otherwise: generate new with matplotlib/plotly/networkx at 150 dpi
+**Three figure sources (check in order):**
+
+1. **Textbook static images:** Scan `ebook/public/images/chapters/ch{NN}/` for existing PNGs
+   - If a figure matches (correct subject, white background, aspect ratio 1.3-1.6): copy to `figures/`
+   - These are Gemini-generated illustrations from the textbook pipeline
+
+2. **Interactive figures from the ebook:** Scan `ebook/components/charts/` for existing React/Visx charts
+   - If an interactive chart exists for this chapter's concepts (e.g., SupplyDemandChart, LorenzCurveChart):
+     - Export a static PNG screenshot for the slide deck
+     - Also embed the interactive version in the viewer via an `<iframe>` pointing to the ebook's chart component (if deployed)
+   - List available interactive charts: `ls ebook/components/charts/`
+
+3. **Generate new:** Create with matplotlib/plotly/networkx at 150 dpi for anything not covered above
 
 **Batch execution (prevents one failure from blocking all):**
 1. Write ALL figure scripts to `{base}/{slug}/figures/` first
@@ -190,13 +199,19 @@ For each successful figure:
      --screenshots --screenshots-directory screenshots/ --size 1920x1080 --pause 3000
    ```
 
-### Step 5b: Lecture Viewer
+### Step 5b: Lecture Viewer + Slide Manager
 
 **Read:** `skills/lecture-viewer/build-viewer.md`
 
 1. Create `{base}/{slug}/viewer/` directory
 2. Copy viewer template files from `skills/lecture-viewer/templates/`
-3. Inject lecture-specific config into `viewer.js`:
+3. Copy slide-manager scripts to lecture directory root:
+   ```bash
+   cp skills/lecture-viewer/scripts/slide-manager.sh "{base}/{slug}/slide-manager.sh"
+   cp skills/lecture-viewer/scripts/slide-manager.py "{base}/{slug}/slide-manager.py"
+   chmod +x "{base}/{slug}/slide-manager.sh"
+   ```
+4. Inject lecture-specific config into `viewer.js`:
    - `presentationPath`: relative path to `../presentation.html`
    - `lectureTitle`: from intake
    - `classDuration`: from intake (for timer)

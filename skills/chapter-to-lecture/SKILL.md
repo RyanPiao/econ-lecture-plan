@@ -47,6 +47,8 @@ Override with `--type` when needed (e.g., principles course needs a lab day).
 ├── screenshots/                Stage 5
 ├── viewer/                     Stage 5 (Canva replacement)
 │   ├── index.html, viewer.js, viewer.css, serve.sh
+├── slide-manager.sh            Edit slides without raw HTML
+├── slide-manager.py            BeautifulSoup backend
 ├── pipeline-state.json         v2 (pending/in_progress/completed)
 ├── .pipeline-lock              Concurrency protection
 ├── nlm-state.json              Stage 6 (includes chain PID)
