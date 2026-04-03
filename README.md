@@ -21,9 +21,9 @@ Converts a completed textbook chapter into a full lecture package. Only 2 inputs
 | 1. Intake + Detect | Auto-derive metadata from textbook frontmatter + course code |
 | 2. Extract + Adapt | Parse chapter, build teaching plan, Presentation Expert review |
 | 3. Generate Lecture | Textbook-quality notes + retrieval practice + exit ticket + optional lab |
-| 4. Generate Figures | Reuse textbook images or generate new (min 3) |
-| 5. Build Slides + Viewer | RevealJS deck + viewer web app |
-| 6. Finalize | Knowledge snapshot + quality gate + NotebookLM podcast |
+| 4. Generate Figures | Reuse textbook images / ebook interactive charts / generate new (min 3) |
+| 5. Build Slides + Viewer | RevealJS deck + viewer web app + slide-manager + sync-slides drop folder |
+| 6. Finalize | Quality gate + NLM podcast + watermark removal + 4K PNG export |
 
 ### `/lecture-prep` — From Scratch (legacy)
 
@@ -146,29 +146,43 @@ cd econ-lecture-material/econ1116-principles-micro/ch14-econ1116-labor-markets/
 # Open http://localhost:8080/viewer/index.html
 ```
 
-### Edit slides
+### Add slides (quickest way — drop folder)
 
 ```bash
-# List slides
+# Drop PNGs into extra-slides/ — they display full 16:9 edge-to-edge
+cp ~/Downloads/new-diagram.png extra-slides/01-labor-demand.png
+cp ~/Downloads/canva-export.png extra-slides/02-wage-gap.png
+
+# One command — done
+./sync-slides.sh
+```
+
+Name files to control order (`01-xxx.png`, `02-xxx.png`). Re-run to update. Delete PNGs and re-run to remove.
+
+### Add NLM review slides (after podcast finishes ~30 min)
+
+```bash
+# Copy NLM 4K PNGs to drop folder
+cp media/slides_part1/page_*.png extra-slides/
+./sync-slides.sh
+```
+
+Or use `/add-nlm-slides .` for the full NLM append with divider slide.
+
+### Edit existing slides (structured editing)
+
+```bash
+# List all slides
 ./slide-manager.sh list
 
-# Add a PNG as a slide
-./slide-manager.sh add-png new-chart.png --after 12
-
-# Add from template
+# Add a template slide (text + image, two-column, divider)
 ./slide-manager.sh add content-figure --title "MRP Curve" --image figures/mrp.png --after 5
 
-# Edit a specific slide
+# Edit a specific slide's HTML
 ./slide-manager.sh edit 8
 
 # Remove a slide
 ./slide-manager.sh remove 14
-```
-
-### Add NLM review slides (after audio finishes ~30 min)
-
-```
-/add-nlm-slides .
 ```
 
 ### Deploy to GitHub Pages for students
@@ -177,12 +191,25 @@ cd econ-lecture-material/econ1116-principles-micro/ch14-econ1116-labor-markets/
 # First time: set up the course repo
 # (see skills/lecture-viewer/deploy-github-pages.md)
 
-# Auto-sync: any edit auto-pushes to GitHub Pages
+# Start auto-sync: any edit auto-pushes to GitHub Pages
 ./auto-sync.sh start
 
-# Now any change you make appears at:
+# Now any save you make appears at:
 # https://yourusername.github.io/econ1116-lectures/ch14/viewer/index.html
+
+# Stop when done
+./auto-sync.sh stop
 ```
+
+### Which tool for what
+
+| Need | Tool | Command |
+|------|------|---------|
+| Add PNGs quickly (NLM, Canva, screenshots) | **sync-slides.sh** | Drop in `extra-slides/` → `./sync-slides.sh` |
+| Add structured slide (text+image, comparison) | **slide-manager.sh** | `./slide-manager.sh add content-figure ...` |
+| Edit existing slide text | **slide-manager.sh** | `./slide-manager.sh edit 8` |
+| NLM review slides with divider | **/add-nlm-slides** | `/add-nlm-slides .` |
+| Live deploy to students | **auto-sync.sh** | `./auto-sync.sh start` |
 
 ### Keyboard shortcuts in the viewer
 
@@ -219,13 +246,26 @@ econ-lecture-material/
 │       ├── styles.css                  Slide theme
 │       ├── slides.pdf                  PDF export
 │       ├── screenshots/               Visual review
+│       │
 │       ├── viewer/                     Lecture viewer web app
-│       │   ├── index.html
+│       │   ├── index.html             (presenter/student/overview modes)
 │       │   ├── viewer.js
 │       │   ├── viewer.css
-│       │   └── serve.sh
-│       ├── pipeline-state.json         Resumption tracking
-│       └── media/                      NotebookLM outputs
+│       │   └── serve.sh               Launch: ./viewer/serve.sh
+│       │
+│       ├── extra-slides/              ← DROP FOLDER: put PNGs here
+│       │   ├── 01-labor-demand.png
+│       │   └── 02-wage-gap.png
+│       ├── sync-slides.sh            Run after adding PNGs to extra-slides/
+│       ├── slide-manager.sh          Structured slide editing CLI
+│       ├── slide-manager.py          (BeautifulSoup backend)
+│       │
+│       ├── pipeline-state.json        Resumption tracking
+│       └── media/                     NotebookLM outputs (auto-chain)
+│           ├── *-podcast.m4a          Deep Dive audio
+│           ├── podcast_transcript_*.txt
+│           ├── slides_part{1,2,3}.pdf  NLM slides (watermarks removed)
+│           └── slides_part{1,2,3}/    4K PNGs (6000×3375px)
 ├── econ3916-applied-data-analytics/
 │   └── ...
 ```
