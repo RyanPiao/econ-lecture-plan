@@ -9,76 +9,46 @@ user_invocable:
 # Chapter-to-Lecture Pipeline
 
 Routes:
-- `/lecture-from-chapter [chapter-path] --course [code]` → Run all 6 stages end-to-end
-- `/lfc [chapter-path] --course [code]` → Alias
-- `/lfc [chapter-path] --course [code] --duration [min]` → Override 75 min default
-- `/lfc [chapter-path] --course [code] --type [class-type]` → Override auto-derived class type
+- `/lecture-from-chapter` or `/lfc` → Read `pipeline.md`, run ALL 6 stages end-to-end without stopping. Do NOT ask the user what they want to do. Do NOT present options. Just run the pipeline.
 
-**Only 2 required inputs:** chapter path + course code. Everything else auto-derived from textbook YAML frontmatter and course code mapping.
+## IMPORTANT: Execution Rules
 
-## 6-Stage Pipeline
+1. **Read `pipeline.md` immediately** — it contains all logic for all 6 stages
+2. **Run all 6 stages end-to-end** — do not stop between stages, do not ask "ready to proceed?"
+3. **Do NOT ask what the user wants** — the command IS the instruction. `/lfc ch14 --course econ1116` means "run the full 6-stage pipeline on ch14 for econ1116"
+4. **Only ask if required inputs are missing** — chapter path and course code. Nothing else.
+5. **Auto-derive everything** — class type, audience level, chapter number, topic title all come from textbook frontmatter + course code mapping. Do not ask for these.
 
-1. **Intake + Detect** — resolve chapter, auto-derive all metadata from textbook frontmatter + course code mapping. Course folder created.
-2. **Extract + Adapt + Presentation Expert Review** — parse chapter → teaching plan → 8-point expert review (objective feasibility, narrative arc, cognitive load, visual flow, engagement, assessment alignment, content integrity, instructor confidence)
-3. **Generate Lecture** — `lecture-notes.md` with retrieval practice, duration-scaled interactions, exit ticket. Optional Jupyter lab for quantitative courses. Sentinel marker appended.
-4. **Generate Figures** — batch execution with partial-failure recovery. Reuse textbook images where suitable. Alt text required. Min 3.
-5. **Build Slides + Viewer** — RevealJS deck (DeckTape `--pause 3000`) + lecture-viewer web app (presenter/student/overview modes, dual-monitor, timer, laser, themes)
-6. **Finalize** — knowledge snapshot + quality gate (checks all new sections) + NLM with PID tracking + failure notification
+## What this does
 
-## Course Category Detection
+Takes a textbook chapter and produces a complete lecture package:
 
-Auto-derived from course code mapping:
-- `qualitative` → `presentation + activity` (principles, micro-theory, game-theory)
-- `quantitative` → `presentation + lab` (ml-stats, econometrics, finance)
+1. **Intake + Detect** — resolve chapter path, auto-derive metadata from textbook YAML frontmatter + course code mapping table
+2. **Extract + Adapt + Presentation Expert Review** — parse chapter → teaching plan → 8-point expert review
+3. **Generate Lecture** — `lecture-notes.md` with retrieval practice, interactive elements, exit ticket. Optional lab for quantitative courses.
+4. **Generate Figures** — reuse textbook images / ebook interactive charts / generate new (min 3)
+5. **Build Slides + Viewer** — RevealJS deck + lecture viewer web app + slide-manager + sync-slides
+6. **Finalize** — knowledge snapshot + quality gate + NLM podcast + watermark removal + 4K PNG export
 
-Override with `--type` when needed (e.g., principles course needs a lab day).
+## Parameters
 
-## Output (nested by course)
+| Parameter | Required | Default | Example |
+|-----------|----------|---------|---------|
+| chapter path | Yes | — | `ch14`, `/path/to/ch14-labor-markets.md` |
+| `--course` | Yes | — | `econ1116`, `econ3916` |
+| `--duration` | No | `75` | `50`, `100` |
+| `--type` | No | Auto from course | `"presentation + lab"`, `"presentation + activity"` |
+
+## Output
 
 ```
-/Users/openclaw/Resilio Sync/Documents/econ-lecture-material/{course_folder}/{slug}/
-├── intake.md                   Stage 1
-├── chapter-extract.md          Stage 2 (with Presentation Expert recommendations)
-├── lecture-notes.md            Stage 3 (with retrieval practice + exit ticket + sentinel)
-├── lab_*.ipynb                 Stage 3 (if quantitative + lab)
-├── lab_*.html                  Stage 3 (HTML companion)
-├── solutions/                  Stage 3 (instructor answer key)
-├── figures/*.png               Stage 4 (150 DPI, alt text)
-├── presentation.html           Stage 5 (RevealJS)
-├── styles.css                  Stage 5
-├── slides.pdf                  Stage 5 (DeckTape, MathJax-safe)
-├── screenshots/                Stage 5
-├── viewer/                     Stage 5 (Canva replacement)
-│   ├── index.html, viewer.js, viewer.css, serve.sh
-├── slide-manager.sh            Edit slides without raw HTML
-├── slide-manager.py            BeautifulSoup backend
-├── sync-slides.sh              Drop PNGs in extra-slides/, run this
-├── extra-slides/               Drop folder for quick PNG slide adds
-├── pipeline-state.json         v2 (pending/in_progress/completed)
-├── .pipeline-lock              Concurrency protection
-├── nlm-state.json              Stage 6 (includes chain PID)
-└── media/                      Stage 6 (NLM auto-chain)
+econ-lecture-material/{course_folder}/{slug}/
+├── intake.md, chapter-extract.md, lecture-notes.md
+├── figures/, presentation.html, styles.css, slides.pdf, screenshots/
+├── viewer/ (index.html, viewer.js, viewer.css, serve.sh)
+├── extra-slides/, sync-slides.sh, slide-manager.sh, slide-manager.py
+├── pipeline-state.json, nlm-state.json, media/
+└── [lab_*.ipynb, lab_*.html, solutions/ — if quantitative]
 ```
 
-## Pipeline Engineering
-
-- **State:** 3 statuses (pending/in_progress/completed). In_progress = restart on resume.
-- **Lock file:** `.pipeline-lock` with PID. Dead PID = stale (auto-removed).
-- **Re-read from disk:** Never rely on working memory across stages.
-- **Batch figures:** Write all scripts first, execute in batch, partial failure OK.
-- **Deconfliction:** Filtered by course code (not full KB scan).
-
-## Differences from `/lecture-prep`
-
-| Aspect | `/lecture-prep` | `/lfc` |
-|--------|----------------|--------|
-| Source | Web search + brainstorm | Textbook chapter |
-| Stages | 10 | 6 |
-| Tokens | ~101K | ~56K |
-| Review | 3-persona critique | Single Presentation Expert |
-| Interview Qs | Generated here | Moved to textbook pipeline |
-| Slides | RevealJS + Canva PNGs | RevealJS + Viewer web app |
-| Output | Flat directory | Nested by course folder |
-| Interactions | Fixed (2 disc + 3 poll) | Duration-scaled formula |
-
-All detailed logic in `pipeline.md` and companion files.
+All detailed logic in `pipeline.md` and companion files (`intake-detect.md`, `extract-adapt.md`, `generate-lecture.md`, `finalize.md`).
