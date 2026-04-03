@@ -1,6 +1,6 @@
 # econ-lecture-plan
 
-A Claude Code skill system for economics lecture preparation. Two pipelines: convert textbook chapters into lecture materials (`/lfc`) or build lectures from scratch (`/lecture-prep`). Includes a lecture viewer web app (replaces Canva), slide manager CLI, and auto-deploy to GitHub Pages.
+A Claude Code skill system for economics lecture preparation. Two pipelines: convert textbook chapters into lecture materials (`/chapter-to-lecture`) or build lectures from scratch (`/lecture-prep`). Includes a lecture viewer web app (replaces Canva), slide manager CLI, and auto-deploy to GitHub Pages.
 
 > Companion to [econ-research-os](https://github.com/RyanPiao/econ-research-os). Works standalone.
 
@@ -8,12 +8,12 @@ A Claude Code skill system for economics lecture preparation. Two pipelines: con
 
 ## Two Pipelines
 
-### `/lfc` — Textbook to Lecture (recommended)
+### `/chapter-to-lecture` — Textbook to Lecture (recommended)
 
 Converts a completed textbook chapter into a full lecture package. Only 2 inputs required.
 
 ```
-/lfc ch1 --course econ1116
+/chapter-to-lecture ch1 --course econ1116
 ```
 
 | Stage | What happens |
@@ -71,7 +71,7 @@ claude .
 ### 3. Prepare a lecture from a textbook chapter
 
 ```
-/lfc /path/to/ch14-labor-markets.md --course econ1116
+/chapter-to-lecture /path/to/ch14-labor-markets.md --course econ1116
 ```
 
 That's it. The pipeline runs all 6 stages automatically and produces everything in `econ-lecture-material/econ1116-principles-micro/ch14-econ1116-labor-markets-human-capital-inequality/`.
@@ -110,13 +110,13 @@ The pipeline auto-detects course type and adapts all output:
 
 ```bash
 # Principles course needs a lab day
-/lfc ch05 --course econ1116 --type "presentation + lab"
+/chapter-to-lecture ch05 --course econ1116 --type "presentation + lab"
 
 # Stats course needs a debate day
-/lfc ch12 --course econ3916 --type "presentation + activity"
+/chapter-to-lecture ch12 --course econ3916 --type "presentation + activity"
 
 # Longer class
-/lfc ch14 --course econ1116 --duration 100
+/chapter-to-lecture ch14 --course econ1116 --duration 100
 ```
 
 ### New Course Not in the Mapping Table
@@ -132,7 +132,7 @@ When you start a new Claude Code session in this project:
 ### Prepare a lecture
 
 ```
-/lfc /path/to/chapter.md --course econ1116
+/chapter-to-lecture /path/to/chapter.md --course econ1116
 ```
 
 The pipeline runs end-to-end. If interrupted, re-run the same command — it resumes from where it stopped.
@@ -276,7 +276,7 @@ econ-lecture-material/
 
 | Command | Description |
 |---------|-------------|
-| `/lfc [chapter] --course [code]` | Textbook → lecture (6 stages) |
+| `/chapter-to-lecture [chapter] --course [code]` | Textbook → lecture (6 stages) |
 | `/lecture-prep` | From-scratch lecture (10 stages) |
 | `/build-viewer [dir]` | Generate viewer for existing slides |
 | `/add-nlm-slides [dir]` | Append NLM PNGs as review slides |
@@ -291,7 +291,7 @@ econ-lecture-material/
 
 ```
 skills/
-├── chapter-to-lecture/         /lfc — 6-stage textbook→lecture pipeline
+├── chapter-to-lecture/         /chapter-to-lecture — 6-stage textbook→lecture pipeline
 ├── lecture-viewer/             Viewer + slide manager + deploy
 ├── lecture-pipeline/           /lecture-prep — 10-stage legacy pipeline
 ├── lecture-intake/             /new-lecture

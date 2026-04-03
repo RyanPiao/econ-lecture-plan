@@ -1,21 +1,20 @@
 ---
 name: chapter-to-lecture
-description: Convert textbook chapters into lecture materials — notes, slides, labs, figures, and viewer app. Auto-detects course type, runs Presentation Expert review, deploys to GitHub Pages. 6-stage pipeline. Trigger: /lecture-from-chapter or /lfc
+description: Convert textbook chapters into lecture materials — notes, slides, labs, figures, and viewer app. Auto-detects course type, runs Presentation Expert review, deploys to GitHub Pages. 6-stage pipeline. Trigger: /chapter-to-lecture
 user_invocable:
-  - /lecture-from-chapter [chapter-path] --course [code] — Run full 6-stage pipeline
-  - /lfc [chapter-path] --course [code] — Alias for /lecture-from-chapter
+  - /chapter-to-lecture [chapter-path] --course [code] — Run full 6-stage pipeline
 ---
 
 # Chapter-to-Lecture Pipeline
 
 Routes:
-- `/lecture-from-chapter` or `/lfc` → Read `pipeline.md`, run ALL 6 stages end-to-end without stopping. Do NOT ask the user what they want to do. Do NOT present options. Just run the pipeline.
+- `/chapter-to-lecture` → Read `pipeline.md`, run ALL 6 stages end-to-end without stopping. Do NOT ask the user what they want to do. Do NOT present options. Just run the pipeline.
 
 ## IMPORTANT: Execution Rules
 
 1. **Read `pipeline.md` immediately** — it contains all logic for all 6 stages
 2. **Run all 6 stages end-to-end** — do not stop between stages, do not ask "ready to proceed?"
-3. **Do NOT ask what the user wants** — the command IS the instruction. `/lfc ch14 --course econ1116` means "run the full 6-stage pipeline on ch14 for econ1116"
+3. **Do NOT ask what the user wants** — the command IS the instruction. `/chapter-to-lecture ch14 --course econ1116` means "run the full 6-stage pipeline on ch14 for econ1116"
 4. **Only ask if required inputs are missing** — chapter path and course code. Nothing else.
 5. **Auto-derive everything** — class type, audience level, chapter number, topic title all come from textbook frontmatter + course code mapping. Do not ask for these.
 

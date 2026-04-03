@@ -15,7 +15,7 @@ Routes:
 - `/add-nlm-slides [lecture-dir]` → Append NotebookLM slide PNGs as bonus review slides
 - `/deploy-lecture [lecture-dir]` → Push lecture to GitHub Pages repo
 - `/deploy-course [course-code]` → Push all lectures for a course
-- Called automatically by `/lfc` Stage 5
+- Called automatically by `/chapter-to-lecture` Stage 5
 
 ## Viewer Features
 
